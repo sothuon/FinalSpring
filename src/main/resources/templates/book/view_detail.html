@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>View Detail</title>
+
+    <link rel="stylesheet" href="/resources/bootstrap.min.css">
+    <link rel="stylesheet" href="/resources/style.css">
+
+</head>
+<body>
+    <div th:replace="fragments/header :: fr-header"></div>
+    <div class="container-fluid">
+        <h1>View Book Detail</h1>
+        <div class="view-detail">
+            <th:block th:if="${book} != null" th:object="${book}">
+                <div class="row">
+                    <div class="col-sm-2">
+                        ID:
+                    </div>
+                    <div class="col-sm-4">
+                        [[*{id}]]
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        Title:
+                    </div>
+                    <div class="col-sm-4">
+                        [[*{title}]]
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        Author:
+                    </div>
+                    <div class="col-sm-4">
+                        [[*{author}]]
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        Puslisher:
+                    </div>
+                    <div class="col-sm-4">
+                        [[*{publisher}]]
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        Category:
+                    </div>
+                    <div class="col-sm-4">
+                        [[*{category.name}]]
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        Thumbnail:
+                    </div>
+                    <div class="col-sm-6">
+                        [[*{thumbnail}]]
+                    </div>
+                </div>
+
+            </th:block>
+            <h1 th:unless="${book}" style="color:red;">No book found!</h1><br>
+            <a href="/index"><button class="btn-primary">Back</button></a>
+        </div>
+    </div>
+    <div th:replace="fragments/footer :: fr-footer"></div>
+    <script src="/resources/bootstrap.min.js"></script>
+    <script src="/resources/jquery.min.js"></script>
+    <script src="/resources/popper.min.js"></script>
+</body>
+</html>

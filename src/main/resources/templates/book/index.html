@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{greeting.message}">List of Book</title>
+
+    <link rel="stylesheet" href="/resources/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<div class="wrapper">
+    <div th:replace="fragments/header :: fr-header"></div>
+    <div class="container-fluid bg-light">
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>List of All Books</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <a href="/create"><button class="btn btn-success">Create New Book</button></a>
+            </div>
+        </div>
+        <br>
+        <table class="table">
+            <tr>
+                <th th:text="#{table.id}">ID</th>
+                <th th:text="#{table.title}">Title</th>
+                <th th:text="#{table.author}">Author</th>
+                <th th:text="#{table.publisher}">Publisher</th>
+                <th th:text="#{table.category}">Category</th>
+                <th th:text="#{table.thumbnail}">Thumbnail</th>
+                <th th:text="#{table.action}">Action</th>
+            </tr>
+            <tr th:each="book: ${books}">
+                <td>[[${book.id}]]</td>
+                <td th:text="${book.getTitle()}"></td>
+                <td th:text="${book.getAuthor()}"></td>
+                <td th:text="${book.getPublisher()}"></td>
+                <td th:text="${book.category.name}"></td>
+                <td>
+                    <img style="width:100px; height: 100px;" th:src="${book.getThumbnail()}" alt="">
+                </td>
+                <td>
+                    <a th:href="@{/view/{id}(id=${book.getId()})}"><button class="btn btn-primary">View</button></a>
+                    <a th:href="@{/update/{book_id}(book_id=${book.getId()})}"><button class="btn btn-warning">Update</button></a>
+                    <button class="btn-delete btn btn-danger" th:attr="data-id = ${book.getId()}">Delete</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!--<script type="text/javascript" src="../../static/script/jquery.min.js"></script>-->
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous">
+
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+           $(".btn-delete").click(function () {
+              var data_id = $(this).attr("data-id");
+              if (confirm("Do you want to delete?")) {
+                  window.location = "http://localhost:9090/delete/" + data_id;
+              }
+           }) ;
+        });
+    </script>
+    <script src="/resources/bootstrap.min.js"></script>
+    <script src="/resources/jquery.min.js"></script>
+    <script src="/resources/popper.min.js"></script>
+</div>
+<div th:replace="fragments/footer :: fr-footer"></div>
+</body>
+</html>
