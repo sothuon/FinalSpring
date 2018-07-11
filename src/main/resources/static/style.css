@@ -9,9 +9,9 @@ h1 {
     font-family: "Times New Roman";
     color: blue;
 }
-.col-sm-12{
-    text-align: right;
-}
+/*.col-sm-12{*/
+    /*text-align: right;*/
+/*}*/
 .navbar{
     color: white;
 }
@@ -35,5 +35,6 @@ h1{
     width: 50%;
     color: white;
 }
+
 
 

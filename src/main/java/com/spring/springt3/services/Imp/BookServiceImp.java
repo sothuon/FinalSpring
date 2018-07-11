@@ -1,6 +1,7 @@
 package com.spring.springt3.services.Imp;
 
 import com.spring.springt3.models.Book;
+import com.spring.springt3.models.filters.BookFilter;
 import com.spring.springt3.repositories.BookRepository;
 import com.spring.springt3.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +42,10 @@ public class BookServiceImp implements BookService {
     @Override
     public boolean create(Book book) {
         return this.bookRepository.create(book);
+    }
+
+    @Override
+    public List<Book> bookFilter(BookFilter bookFilter) {
+        return this.bookRepository.bookFilter(bookFilter);
     }
 }

@@ -2,6 +2,7 @@ package com.spring.springt3.controllers;
 
 import com.spring.springt3.models.Book;
 import com.spring.springt3.models.Category;
+import com.spring.springt3.models.filters.BookFilter;
 import com.spring.springt3.services.BookService;
 import com.spring.springt3.services.CategoryService;
 import com.spring.springt3.services.UploadService;
@@ -37,9 +38,14 @@ public class BookController {
     }
 
     @GetMapping({"/index", "/", "/home"})
-    public String index(Model model){
-        List<Book> bookList= this.bookService.getAll();
-        model.addAttribute("books",bookList);
+    public String index(ModelMap model, BookFilter bookFilter){
+        System.out.println(bookFilter);
+//        List<Book> bookList= this.bookService.getAll();
+        List<Book> books = this.bookService.bookFilter(bookFilter);
+        model.addAttribute("books", books);
+
+        List<Category> categories = this.categoryService.getAll();
+        model.addAttribute("categories", categories);
         return "book/index";
     }
 

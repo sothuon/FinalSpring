@@ -6,6 +6,7 @@
 
     <link rel="stylesheet" href="/resources/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 <body>
@@ -19,11 +20,31 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <a href="/create"><button class="btn btn-success">Create New Book</button></a>
+                <form class="form-row" method="get" id="search-form">
+                    <!--<form class="form-row" action="/index">-->
+                    <div class="col-sm-4">
+                        <select name="cateId" id="cate-id" class="form-control">
+                            <option disabled selected>Filter By Category</option>
+                            <option value="">All Category</option>
+                            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">Category Name</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <input id="book-title" name="bookTitle" type="text" class="form-control" placeholder="Search for...">
+                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
+
+        <div class="col-sm-4">
+            <a href="/create"><button class="btn btn-success">Create New Book</button></a>
+        </div>
         <br>
-        <table class="table">
+        <table id="table-id" class="table">
+            <thead>
             <tr>
                 <th th:text="#{table.id}">ID</th>
                 <th th:text="#{table.title}">Title</th>
@@ -33,6 +54,10 @@
                 <th th:text="#{table.thumbnail}">Thumbnail</th>
                 <th th:text="#{table.action}">Action</th>
             </tr>
+
+            </thead>
+
+            <tbody>
             <tr th:each="book: ${books}">
                 <td>[[${book.id}]]</td>
                 <td th:text="${book.getTitle()}"></td>
@@ -48,7 +73,21 @@
                     <button class="btn-delete btn btn-danger" th:attr="data-id = ${book.getId()}">Delete</button>
                 </td>
             </tr>
+            </tbody>
         </table>
+        <!--Start Modal-->
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Add New Book</button>
+
+        <!--Modal-->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+                <!--content-->
+                <div class="modal-content">
+
+                    Modal
+                </div>
+            </div>
+        </div>
     </div>
     <!--<script type="text/javascript" src="../../static/script/jquery.min.js"></script>-->
     <script
@@ -60,6 +99,48 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            function bookFilter(cateId, bookTitle) {
+
+                var tr = '';
+
+                $.ajax({
+                    url:'http://localhost:9090/ajax/index/filter?cateId=' + cateId + '&bookTitle=' + bookTitle,
+                    type: 'get',
+                    success: function (response) {
+                        $.each(response, function (index, book) {
+                            tr += '<tr >' +
+                                '                <td>'+ book.id +'</td>\n' +
+                                '                <td>' + book.book_title + '</td>\n' +
+                                '                <td>'+ book.author +'</td>\n' +
+                                '                <td>' + book.publisher + '</td>\n' +
+                                '                <td>'+ book.category.name +'</td>\n' +
+                                '                <td>\n' +
+                                '                    <img style="width:100px; height: 100px;" src="'+book.thumbnail+'" alt="">\n' +
+                                '                </td>\n' +
+                                '                <td>\n' +
+                                '                    <a th:href="@{/view/{id}(id=${book.getId()})}"><button class="btn btn-primary">View</button></a>\n' +
+                                '                    <a th:href="@{/update/{book_id}(book_id=${book.getId()})}"><button class="btn btn-warning">Update</button></a>\n' +
+                                '                    <button class="btn-delete btn btn-danger" th:attr="data-id = ${book.getId()}">Delete</button>\n' +
+                                '                </td>\n' +
+                                '            </tr>'
+                        })
+                        $('#table-id tbody').empty();
+                        $('#table-id tbody').append(tr);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+            $('#search-form').on('submit', function (event) {
+                event.preventDefault();
+
+                var cate_id = $('#cate-id').val();
+                if(cate_id == null)
+                    cate_id = '';
+                bookFilter(cate_id, $('#book-title').val());
+            });
+
            $(".btn-delete").click(function () {
               var data_id = $(this).attr("data-id");
               if (confirm("Do you want to delete?")) {

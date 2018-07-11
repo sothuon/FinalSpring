@@ -2,6 +2,7 @@ package com.spring.springt3.repositories;
 
 import com.github.javafaker.Faker;
 import com.spring.springt3.models.Book;
+import com.spring.springt3.models.filters.BookFilter;
 import com.spring.springt3.repositories.providers.BookProvider;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
@@ -20,6 +21,15 @@ public interface BookRepository {
             @Result(column = "name", property = "category.name")
     })// use to bind column name and field oy know each other
     List<Book> getAll();
+
+    @SelectProvider(type = BookProvider.class, method = "bookFilterProvider")
+    @Results({
+            @Result(column = "id", property = "id"),
+            @Result(column = "title", property = "title"),
+            @Result(column = "cate_id", property = "category.id"),
+            @Result(column = "name", property = "category.name")
+    })
+    List<Book> bookFilter(BookFilter filter);
 
     @Select("select * from book_tbl b inner join category_tbl c ON b.cate_id = c.id where b.id=#{id}")
     @Results({

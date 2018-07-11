@@ -1,5 +1,7 @@
 package com.spring.springt3.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -10,6 +12,7 @@ public class Book {
     @NotNull
     private Integer id;
 
+    @JsonProperty("book_title")
     private String title;
 
     private String author;
